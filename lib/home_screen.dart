@@ -11,8 +11,117 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Map<String, dynamic>> earning =[];
-  List<Map<String, dynamic>> expense =[];
+  final List<Map<String, dynamic>> earning = [];
+  final List<Map<String, dynamic>> expense = [];
+
+  void _showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _showForm(true);
+                },
+                child: Text('Add Earning'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _showForm(false);
+                },
+                child: Text('Add Expense'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showForm(bool isEarning) {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController amountController = TextEditingController();
+    final DateTime entryDate = DateTime.now();
+
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                isEarning ? 'Add Earning' : 'Add Expense',
+                style: TextStyle(fontSize: 24),
+              ),
+              TextFormField(
+                controller: titleController,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10),
+              TextFormField(
+                controller: amountController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: 'Amount',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if(isEarning){
+                      earning.add({
+                        'title': titleController.text,
+                        'amount': amountController.text,
+                        'date': entryDate,
+                      });
+                      setState(() {});
+                    }else{
+                      expense.add({
+                        'title': titleController.text,
+                        'amount': amountController.text,
+                        'date': entryDate,
+                      });
+                      setState(() {});
+                    }
+                  },
+                  child: Text('Submit'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -64,18 +173,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             Expanded(
-              child: TabBarView(children: [
-                buildList(items: earning, isEarning: true,),
-                buildList(items: expense, isEarning: false,),
-              ]),
+              child: TabBarView(
+                children: [
+                  buildList(items: earning, isEarning: true),
+                  buildList(items: expense, isEarning: false),
+                ],
+              ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white,
+          onPressed: () => _showOptions(context),
+          child: Icon(Icons.add),
         ),
       ),
     );
   }
 }
-
-
