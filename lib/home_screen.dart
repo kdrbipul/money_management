@@ -1,5 +1,6 @@
 import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:money_management/widget/build_list.dart';
 import 'package:money_management/widget/build_summery_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,6 +11,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Map<String, dynamic>> earning =[];
+  List<Map<String, dynamic>> expense =[];
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -61,9 +64,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+            SizedBox(height: 10,),
+            Expanded(
+              child: TabBarView(children: [
+                buildList(items: earning, isEarning: true,),
+                buildList(items: expense, isEarning: false,),
+              ]),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
+
