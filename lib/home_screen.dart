@@ -14,11 +14,13 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> earning = [];
   final List<Map<String, dynamic>> expense = [];
 
-  double get totalEarning => earning.fold(0, (sum, item) => sum + double.parse(item['amount']));
-  double get totalExpense => expense.fold(0, (sum, item) => sum + double.parse(item['amount']));
+  double get totalEarning =>
+      earning.fold(0, (sum, item) => sum + double.parse(item['amount']));
+
+  double get totalExpense =>
+      expense.fold(0, (sum, item) => sum + double.parse(item['amount']));
+
   double get balance => totalEarning - totalExpense;
-
-
 
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
@@ -103,17 +105,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     onPressed: () {
                       Navigator.pop(context);
-                      if(isEarning){
+                      if (isEarning) {
                         earning.add({
-                          'title': titleController.text,
-                          'amount': double.tryParse(amountController.text),
+                          'title': titleController.text.trim(),
+                          'amount': amountController.text.trim(),
                           'date': entryDate,
                         });
                         setState(() {});
-                      }else{
+                      } else {
                         expense.add({
-                          'title': titleController.text,
-                          'amount': double.tryParse(amountController.text),
+                          'title': titleController.text.trim(),
+                          'amount': amountController.text.trim(),
                           'date': entryDate,
                         });
                         setState(() {});
@@ -185,8 +187,20 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: TabBarView(
                 children: [
-                  buildList(items: earning, isEarning: true),
-                  buildList(items: expense, isEarning: false),
+                  buildList(
+                    items: earning,
+                    isEarning: true,
+                    cardColor: Colors.green,
+                    cardIcon: Icon(Icons.arrow_upward),
+                    backgroundCardColor: Colors.green.shade100,
+                  ),
+                  buildList(
+                    items: expense,
+                    isEarning: false,
+                    cardColor: Colors.red,
+                    cardIcon: Icon(Icons.arrow_downward),
+                    backgroundCardColor: Colors.red.shade100,
+                  ),
                 ],
               ),
             ),

@@ -3,7 +3,19 @@ import 'package:flutter/material.dart';
 class buildList extends StatelessWidget {
   final List<Map<String, dynamic>> items;
   final bool isEarning;
-  const buildList({super.key, required this.items, required this.isEarning,});
+  final Color cardColor;
+  final Color backgroundCardColor;
+  final Icon cardIcon;
+
+
+  const buildList({
+    super.key,
+    required this.items,
+    required this.isEarning,
+    required this.cardColor,
+    required this.cardIcon,
+    required this.backgroundCardColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +25,7 @@ class buildList extends StatelessWidget {
       itemCount: items.length,
       itemBuilder: (context, index) {
         return Card(
+          color: backgroundCardColor,
           elevation: 3,
           child: ListTile(
             title: Text(items[index]['title']),
@@ -23,9 +36,9 @@ class buildList extends StatelessWidget {
               textAlign: TextAlign.end,
             ),
             leading: CircleAvatar(
-              backgroundColor: Colors.green,
-              child: Icon(Icons.arrow_upward, color: Colors.white,),
-            )
+              backgroundColor: cardColor,
+              child: Icon(cardIcon.icon, color: Colors.white),
+            ),
           ),
         );
       },
