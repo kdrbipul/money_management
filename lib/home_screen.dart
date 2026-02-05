@@ -14,6 +14,12 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> earning = [];
   final List<Map<String, dynamic>> expense = [];
 
+  double get totalEarning => earning.fold(0, (sum, item) => sum + double.parse(item['amount']));
+  double get totalExpense => expense.fold(0, (sum, item) => sum + double.parse(item['amount']));
+  double get balance => totalEarning - totalExpense;
+
+
+
   void _showOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -57,65 +63,67 @@ class _HomeScreenState extends State<HomeScreen> {
     final TextEditingController amountController = TextEditingController();
     final DateTime entryDate = DateTime.now();
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
       builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                isEarning ? 'Add Earning' : 'Add Expense',
-                style: TextStyle(fontSize: 24),
-              ),
-              TextFormField(
-                controller: titleController,
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  isEarning ? 'Add Earning' : 'Add Expense',
+                  style: TextStyle(fontSize: 24),
                 ),
-              ),
-              SizedBox(height: 10),
-              TextFormField(
-                controller: amountController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  labelText: 'Amount',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+                TextFormField(
+                  controller: titleController,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'Title',
+                    border: OutlineInputBorder(),
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    if(isEarning){
-                      earning.add({
-                        'title': titleController.text,
-                        'amount': amountController.text,
-                        'date': entryDate,
-                      });
-                      setState(() {});
-                    }else{
-                      expense.add({
-                        'title': titleController.text,
-                        'amount': amountController.text,
-                        'date': entryDate,
-                      });
-                      setState(() {});
-                    }
-                  },
-                  child: Text('Submit'),
                 ),
-              ),
-            ],
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: amountController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: 'Amount',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      if(isEarning){
+                        earning.add({
+                          'title': titleController.text,
+                          'amount': amountController.text,
+                          'date': entryDate,
+                        });
+                        setState(() {});
+                      }else{
+                        expense.add({
+                          'title': titleController.text,
+                          'amount': amountController.text,
+                          'date': entryDate,
+                        });
+                        setState(() {});
+                      }
+                    },
+                    child: Text('Submit'),
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -158,17 +166,17 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 BuildSummeryCard(
                   title: 'Earning',
-                  amount: 500,
+                  amount: totalEarning,
                   cardColor: Colors.green,
                 ),
                 BuildSummeryCard(
                   title: 'Expense',
-                  amount: 500,
+                  amount: totalExpense,
                   cardColor: Colors.red,
                 ),
                 BuildSummeryCard(
                   title: 'Balance',
-                  amount: 500,
+                  amount: balance,
                   cardColor: Colors.blue,
                 ),
               ],
