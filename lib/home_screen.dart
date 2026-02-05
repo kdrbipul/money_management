@@ -106,14 +106,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       if(isEarning){
                         earning.add({
                           'title': titleController.text,
-                          'amount': amountController.text,
+                          'amount': double.tryParse(amountController.text),
                           'date': entryDate,
                         });
                         setState(() {});
                       }else{
                         expense.add({
                           'title': titleController.text,
-                          'amount': amountController.text,
+                          'amount': double.tryParse(amountController.text),
                           'date': entryDate,
                         });
                         setState(() {});
