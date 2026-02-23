@@ -1,3 +1,4 @@
+import 'package:money_management/widget/db/task.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' as p;
 
@@ -18,18 +19,16 @@ class TaskDatabase {
     return _db!;
   }
 
-  static Future<void> insert(String title, String date) async {
+  static Future<void> insert(Task task) async {
     final db = await getDb();
-    await db.insert(
-      'tasks',
-      {
-        'title': title,
-        'date': date,
-        'isDone': 0,
-      },
-
-      conflictAlgorithm: ConflictAlgorithm.replace,
-
+    await db.insert('tasks', task.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace
     );
+  }
+
+  static Future<List <Task>> getTasks() async {
+    final db = await getDb();
+    final List<Map<String, dynamic>> maps = await db.query('tasks');
+    return List.generate(maps.length, (i) => Task.fromMap(maps[i]));
   }
 }

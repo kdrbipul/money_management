@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_management/ui/task_home_page.dart';
 import 'home_screen.dart';
 
 class App extends StatelessWidget {
@@ -10,7 +11,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'MoneyManagement',
-        home: HomeScreen(),
+        home: TaskHomePage(),
         theme: ThemeData(
           useMaterial3: true,
           appBarTheme: AppBarThemeData(
